@@ -1,3 +1,5 @@
+#! /usr/bin/env ruby
+
 require_relative "module2_assignment"
 
 # This script provides a sample execution of the Solution class
