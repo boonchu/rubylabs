@@ -12,4 +12,7 @@ class Player
   def to_s
     "<#{name}: #{skill_level}(SL), #{age}(AGE)>"
   end
+
+  # defines the scope of method to private
+  private :to_s
 end
