@@ -1,0 +1,14 @@
+# learn gem
+gem install httparty
+
+code requires pretty print (pp) and httparty
+
+ruby Coursera.rb > python.json
+
+# learn bundler
+require Gemfile to resolve dependencies
+source 'http://rubygems.org'
+gem 'httparty'
+
+bundler install
+bundler update
