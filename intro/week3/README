@@ -12,3 +12,12 @@ gem 'httparty'
 
 bundler install
 bundler update
+
+# learn rails
+
+cd my_first_app
+bundler install
+bundler update
+rails s
+
+access http://localhost:3000/courses/index
