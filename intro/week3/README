@@ -35,6 +35,18 @@ heroku  https://git.heroku.com/search-coursera-bigchoo.git (fetch)
 heroku  https://git.heroku.com/search-coursera-bigchoo.git (push)
 $ git push heroku master
 
+# learn rspec
+
+gem install rspec
+gem install selenium-webdriver
+gem install capybara
+gem install poltergeist
+rspec -f d
+
 # learn phantom.js
 brew install node
 npm install -g phantomjs
+
+# learn debuging rails
+gem byebug: debugging and executing
+em webconsole: ability to have your IRB console in your browser
