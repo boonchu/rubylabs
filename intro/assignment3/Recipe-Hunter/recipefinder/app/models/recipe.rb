@@ -1,5 +1,5 @@
-require 'httparty'
-require 'pp'
+#require 'httparty'
+#require 'pp'
 
 class Recipe
     include HTTParty
@@ -9,7 +9,7 @@ class Recipe
 
     key_value = ENV['FOOD2FORK_KEY'] || '40f95187f77400f34067c40c8c4024ff'
 
-    ENV['FOOD2FORK_SERVER_AND_PORT'] = 'www.food2fork.com:80'
+    #ENV['FOOD2FORK_SERVER_AND_PORT'] = 'www.food2fork.com:80'
     hostport = ENV['FOOD2FORK_SERVER_AND_PORT'] || 'www.food2fork.com'
 
     base_uri "http://#{hostport}/api"
