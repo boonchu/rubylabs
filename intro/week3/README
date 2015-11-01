@@ -21,3 +21,15 @@ bundler update
 rails s
 
 access http://localhost:3000/courses/index
+search term http://localhost:3000/courses/index?looking_for=python
+
+# learn heroku
+install heroku client app from toolbelt.heroku.com
+change Gemfile to segegate environment between development and eroduction
+brew install postgresql
+bundler
+heroku login
+heroku create [instance-name]
+$ git remote -v
+heroku  https://git.heroku.com/search-coursera-bigchoo.git (fetch)
+heroku  https://git.heroku.com/search-coursera-bigchoo.git (push)
