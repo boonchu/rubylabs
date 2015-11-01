@@ -1,0 +1,11 @@
+### README
+
+$ cd Recipe-Hunter
+$ gem uninstall libv8 # ignore if this fails
+$ gem install libv8 -v 3.16.14.3 -- --with-system-v8 
+$ gem install rspec
+$ gem install rspec-its
+$ gem install capybara
+$ gem install poltergeist
+$ bundler
+$ rspec
