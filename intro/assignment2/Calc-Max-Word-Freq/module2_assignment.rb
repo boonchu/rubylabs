@@ -105,6 +105,7 @@ class Solution
     line_number = 0    
     begin
 
+      # IO.foreach( 'test.txt' ) do |line|
       File.foreach( 'test.txt' ) do |line|
         line = line.downcase()
         line_number += 1
