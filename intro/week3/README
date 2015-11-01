@@ -43,6 +43,19 @@ gem install capybara
 gem install poltergeist
 rspec -f d
 
+```shell
+
+Coursera App
+  displays 'The Meat We Eat' when looking_for=diet
+  visit root
+    displays 'Johns Hopkins' (default)
+    displays table element that has a row with 3 columns
+    column 1 should have the thumbnail inside img tag
+
+Finished in 3.04 seconds (files took 0.3181 seconds to load)
+4 examples, 0 failures
+```
+
 # learn phantom.js
 brew install node
 npm install -g phantomjs
