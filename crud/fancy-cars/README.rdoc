@@ -1,28 +1,100 @@
 == README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+* Scaffolding Generator
+* Applying Scaffolding to DB
+* start rails and update DB
+* run test to retrieve records from MVC
 
-Things you may want to cover:
+```
+rails generate scaffold car make color year:integer
+rake --task
+rake db:migrate
+rails s
+curl http://localhost:3000/cars.json
+```
 
-* Ruby version
+* Database SQLite3
+  * Which database are we using? (config/database.yml)
+  * accessing DB
+  * investigate your schema
 
-* System dependencies
+```
+rails db
+sqlite> .tables
+cars               people             schema_migrations
+sqlite> .headers on
+sqlite> .mode columns
+sqlite> select * from cars;
+id          company     color       year        created_at                  updated_at                  price
+----------  ----------  ----------  ----------  --------------------------  --------------------------  ----------
+1           Cadillac    Black       2014        2015-11-11 16:22:37.236499  2015-11-11 16:22:37.236499
+2           Infiniti    Silver      2015        2015-11-11 16:22:59.309560  2015-11-11 16:22:59.309560
+3           BMW         Blue        2014        2015-11-11 16:23:17.527342  2015-11-11 16:23:17.527342
 
-* Configuration
+❯ rails db                                                                              system
+SQLite version 3.8.10.2 2015-05-20 18:17:19
+Enter ".help" for usage hints.
+sqlite> .schema cars
+CREATE TABLE "cars" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "company" varchar, "color" varchar, "year" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "price" decimal(10,2));
+```
 
-* Database creation
+* Adding price to Cars table
 
-* Database initialization
+```
+$ rails generate migration add_price_to_cars 'price:decimal{10,2}'                      system
+      invoke  active_record
+   identical    db/migrate/20150907183118_add_price_to_cars.rb
 
-* How to run the test suite
+$ cat db/migrate/20150907183118_add_price_to_cars.rb                                    system
+class AddPriceToCars < ActiveRecord::Migration
+  def change
+    add_column :cars, :price, :decimal, precision: 10, scale: 2
+  end
+end
 
-* Services (job queues, cache servers, search engines, etc.)
+❯ rails db                                                                              system
+SQLite version 3.8.10.2 2015-05-20 18:17:19
+Enter ".help" for usage hints.
+sqlite> .schema cars
+CREATE TABLE "cars" ("id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "company" varchar, "color" varchar, "year" integer, "created_at" datetime NOT NULL, "updated_at" datetime NOT NULL, "price" decimal(10,2));
+sqlite> .exit
+```
 
-* Deployment instructions
+* Overall Schema of Your DB
 
-* ...
+```
+cat db/schema.rb                                                                      system
+# encoding: UTF-8
+# This file is auto-generated from the current state of the database. Instead
+# of editing this file, please use the migrations feature of Active Record to
+# incrementally modify your database, and then regenerate this schema definition.
+#
+# Note that this schema.rb definition is the authoritative source for your
+# database schema. If you need to create the application database on another
+# system, you should be using db:schema:load, not running all the migrations
+# from scratch. The latter is a flawed and unsustainable approach (the more migrations
+# you'll amass, the slower it'll run and the greater likelihood for issues).
+#
+# It's strongly recommended that you check this file into your version control system.
 
+ActiveRecord::Schema.define(version: 20150907202117) do
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+  create_table "cars", force: :cascade do |t|
+    t.string   "company"
+    t.string   "color"
+    t.integer  "year"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.decimal  "price",      precision: 10, scale: 2
+  end
+
+  create_table "people", force: :cascade do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+end
+```
+
