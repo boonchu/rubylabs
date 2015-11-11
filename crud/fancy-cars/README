@@ -98,3 +98,42 @@ ActiveRecord::Schema.define(version: 20150907202117) do
 end
 ```
 
+* Renaming Column name
+  * generate new migration
+  * edit migration file to have rename logic
+  * start rails
+  * run db:migrate
+  * edit app/views/cars/index.html.erb
+  * edit app/views/cars/index.json.jbuilder
+
+```
+$ rails generate migration rename_company_to_make --skip
+
+$ cat db/migrate/20151111164517_rename_company_to_make.rb                               system
+class RenameCompanyToMake < ActiveRecord::Migration
+  def change
+    rename_column :cars, :company, :make
+  end
+end
+
+$ rails s
+ compliant from browser after hitting http://localhost:3000/cars
+
+"Migrations are pending. To resolve this issue, run: bin/rake db:migrate RAILS_ENV=development"
+
+rake db:migrate                                                                       system
+== 20151111164517 RenameCompanyToMake: migrating ==============================
+-- rename_column(:cars, :company, :make)
+   -> 0.0060s
+== 20151111164517 RenameCompanyToMake: migrated (0.0061s) =====================
+
+ActionView::Template::Error (undefined method `company' for #<Car:0x0000010205d1a8>):
+    15:   <tbody>
+    16:     <% @cars.each do |car| %>
+    17:       <tr>
+    18:         <td><%= car.company %></td>
+    19:         <td><%= car.color %></td>
+    20:         <td><%= car.year %></td>
+    21:         <td><%= link_to 'Show', car %></td>
+
+```
