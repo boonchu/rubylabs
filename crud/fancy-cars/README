@@ -137,3 +137,171 @@ ActionView::Template::Error (undefined method `company' for #<Car:0x0000010205d1
     21:         <td><%= link_to 'Show', car %></td>
 
 ```
+
+* Rails Console
+
+```
+> rails c                                                                                                                                    master [65989fd]
+Loading development environment (Rails 4.2.3)
+2.1.1 :001 > Car.column_names
+ => ["id", "make", "color", "year", "created_at", "updated_at", "price"]
+2.1.1 :002 > Car.primary_key
+ => "id"
+2.1.1 :003 > exit
+```
+
+* Model and Migration
+
+```
+> irb                                                                                                                                        master [65989fd]
+2.1.1 :001 > pros = { name: "John", age: 15 }
+ => {:name=>"John", :age=>15}
+2.1.1 :002 > person = Person.new
+NameError: uninitialized constant Person
+    from (irb):2
+    from /Users/bigchoo/.rvm/rubies/ruby-2.1.1/bin/irb:11:in `<main>'
+2.1.1 :003 > class Person; attr_accessor :name, :age; end
+ => nil
+2.1.1 :004 > person = Person.new
+ => #<Person:0x000001030f0358>
+2.1.1 :005 > pros.each { |key, value| person.send("#{key}=", value) }
+ => {:name=>"John", :age=>15}
+2.1.1 :006 >
+
+> rails generate model person first_name last_name                                                                                  master [65989fd] modified
+      invoke  active_record
+   identical    db/migrate/20150907202117_create_people.rb
+   identical    app/models/person.rb
+      invoke    test_unit
+   identical      test/models/person_test.rb
+   identical      test/fixtures/people.yml
+```
+
+* Active Record
+
+```
+MacPro :: crud/fancy-cars » rails c
+Loading development environment (Rails 4.2.3)
+2.1.1 :001 > Person.column_names
+ => ["id", "first_name", "last_name", "created_at", "updated_at"]
+2.1.1 :002 > p1 = Person.new; p1.first_name = "Joe"; p1.last_name = "Smith"
+ => "Smith"
+2.1.1 :003 > p1.save
+   (0.2ms)  begin transaction
+  SQL (0.9ms)  INSERT INTO "people" ("first_name", "last_name", "created_at", "updated_at") VALUES (?, ?, ?, ?)  [["first_name", "Joe"], ["last_name", "Smith"], ["created_at", "2015-11-12 15:44:17.135745"], ["updated_at", "2015-11-12 15:44:17.135745"]]
+   (0.5ms)  commit transaction
+ => true
+2.1.1 :004 > p2 = Person.new( first_name: "John", last_name: "Smith"); p2.save
+   (0.1ms)  begin transaction
+  SQL (0.2ms)  INSERT INTO "people" ("first_name", "last_name", "created_at", "updated_at") VALUES (?, ?, ?, ?)  [["first_name", "John"], ["last_name", "Smith"], ["created_at", "2015-11-12 15:44:50.523370"], ["updated_at", "2015-11-12 15:44:50.523370"]]
+   (1.1ms)  commit transaction
+ => true
+2.1.1 :001 > p3 = Person.create(first_name: "Jane", last_name: "Doe")
+   (0.1ms)  begin transaction
+  SQL (0.4ms)  INSERT INTO "people" ("first_name", "last_name", "created_at", "updated_at") VALUES (?, ?, ?, ?)  [["first_name", "Jane"], ["last_name", "Doe"], ["created_at", "2015-11-12 15:46:29.781099"], ["updated_at", "2015-11-12 15:46:29.781099"]]
+   (0.9ms)  commit transaction
+ => #<Person id: 3, first_name: "Jane", last_name: "Doe", created_at: "2015-11-12 15:46:29", updated_at: "2015-11-12 15:46:29">
+2.1.1 :002 >
+```
+
+* Take and Pluck
+
+```
+2.1.1 :003 >   Person.all.order(first_name: :desc)
+  Person Load (1.3ms)  SELECT "people".* FROM "people"  ORDER BY "people"."first_name" DESC
+ => #<ActiveRecord::Relation [#<Person id: 2, first_name: "John", last_name: "Smith", created_at: "2015-11-12 15:44:50", updated_at: "2015-11-12 15:44:50">, #<Person id: 1, first_name: "Joe", last_name: "Smith", created_at: "2015-11-12 15:44:17", updated_at: "2015-11-12 15:44:17">, #<Person id: 3, first_name: "Jane", last_name: "Doe", created_at: "2015-11-12 15:46:29", updated_at: "2015-11-12 15:46:29">]>
+
+2.1.1 :004 > Person.all.order(first_name: :desc).to_a
+  Person Load (0.2ms)  SELECT "people".* FROM "people"  ORDER BY "people"."first_name" DESC
+ => [#<Person id: 2, first_name: "John", last_name: "Smith", created_at: "2015-11-12 15:44:50", updated_at: "2015-11-12 15:44:50">, #<Person id: 1, first_name: "Joe", last_name: "Smith", created_at: "2015-11-12 15:44:17", updated_at: "2015-11-12 15:44:17">, #<Person id: 3, first_name: "Jane", last_name: "Doe", created_at: "2015-11-12 15:46:29", updated_at: "2015-11-12 15:46:29">]
+
+2.1.1 :005 > Person.first
+  Person Load (0.1ms)  SELECT  "people".* FROM "people"  ORDER BY "people"."id" ASC LIMIT 1
+ => #<Person id: 1, first_name: "Joe", last_name: "Smith", created_at: "2015-11-12 15:44:17", updated_at: "2015-11-12 15:44:17">
+
+2.1.1 :006 > Person.all.first
+  Person Load (0.1ms)  SELECT  "people".* FROM "people"  ORDER BY "people"."id" ASC LIMIT 1
+ => #<Person id: 1, first_name: "Joe", last_name: "Smith", created_at: "2015-11-12 15:44:17", updated_at: "2015-11-12 15:44:17">
+
+2.1.1 :007 > Person.all[0]
+  Person Load (0.1ms)  SELECT "people".* FROM "people"
+ => #<Person id: 1, first_name: "Joe", last_name: "Smith", created_at: "2015-11-12 15:44:17", updated_at: "2015-11-12 15:44:17">
+
+2.1.1 :008 > Person.take
+  Person Load (0.2ms)  SELECT  "people".* FROM "people" LIMIT 1
+ => #<Person id: 1, first_name: "Joe", last_name: "Smith", created_at: "2015-11-12 15:44:17", updated_at: "2015-11-12 15:44:17">
+
+2.1.1 :009 > Person.take 2
+  Person Load (0.1ms)  SELECT  "people".* FROM "people" LIMIT 2
+ => [#<Person id: 1, first_name: "Joe", last_name: "Smith", created_at: "2015-11-12 15:44:17", updated_at: "2015-11-12 15:44:17">, #<Person id: 2, first_name: "John", last_name: "Smith", created_at: "2015-11-12 15:44:50", updated_at: "2015-11-12 15:44:50">]
+
+2.1.1 :001 > Person.all.map { |person|  person.first_name }
+  Person Load (0.9ms)  SELECT "people".* FROM "people"
+ => ["Joe", "John", "Jane"]
+2.1.1 :002 >
+```
+
+* Where 
+
+* Find_by
+
+* limit/Offset
+
+* Update CRUD
+
+```
+2.1.1 :001 > jane = Person.find_by first_name: "Jane"
+  Person Load (0.2ms)  SELECT  "people".* FROM "people" WHERE "people"."first_name" = ? LIMIT 1  [["first_name", "Jane"]]
+ => #<Person id: 3, first_name: "Jane", last_name: "Doe", created_at: "2015-11-12 15:46:29", updated_at: "2015-11-12 15:46:29">
+2.1.1 :002 > jane.last_name = "Smithie"
+ => "Smithie"
+2.1.1 :003 > jane.save
+   (0.1ms)  begin transaction
+  SQL (0.4ms)  UPDATE "people" SET "last_name" = ?, "updated_at" = ? WHERE "people"."id" = ?  [["last_name", "Smithie"], ["updated_at", "2015-11-12 15:56:12.705962"], ["id", 3]]
+   (1.0ms)  commit transaction
+ => true
+2.1.1 :004 > jane = Person.find(3)
+  Person Load (0.2ms)  SELECT  "people".* FROM "people" WHERE "people"."id" = ? LIMIT 1  [["id", 3]]
+ => #<Person id: 3, first_name: "Jane", last_name: "Smithie", created_at: "2015-11-12 15:46:29", updated_at: "2015-11-12 15:56:12">
+2.1.1 :005 > Person.find_by(last_name: "Smith").update(last_name: "Smithson")
+  Person Load (0.2ms)  SELECT  "people".* FROM "people" WHERE "people"."last_name" = ? LIMIT 1  [["last_name", "Smith"]]
+   (0.1ms)  begin transaction
+  SQL (0.2ms)  UPDATE "people" SET "last_name" = ?, "updated_at" = ? WHERE "people"."id" = ?  [["last_name", "Smithson"], ["updated_at", "2015-11-12 15:57:02.115422"], ["id", 1]]
+   (1.0ms)  commit transaction
+ => true
+
+```
+
+* Destroy/Delete CRUD
+  * delete vs destroy
+
+```
+MacPro :: crud/fancy-cars » rails c
+Loading development environment (Rails 4.2.3)
+2.1.1 :001 > Person.count
+   (0.1ms)  SELECT COUNT(*) FROM "people"
+ => 3
+
+2.1.1 :002 > jane = Person.find_by first_name: "Jane"
+  Person Load (0.2ms)  SELECT  "people".* FROM "people" WHERE "people"."first_name" = ? LIMIT 1  [["first_name", "Jane"]]
+ => #<Person id: 3, first_name: "Jane", last_name: "Smithie", created_at: "2015-11-12 15:46:29", updated_at: "2015-11-12 15:56:12">
+
+2.1.1 :003 > jane.destroy
+   (0.1ms)  begin transaction
+  SQL (0.3ms)  DELETE FROM "people" WHERE "people"."id" = ?  [["id", 3]]
+   (1.0ms)  commit transaction
+ => #<Person id: 3, first_name: "Jane", last_name: "Smithie", created_at: "2015-11-12 15:46:29", updated_at: "2015-11-12 15:56:12">
+
+2.1.1 :004 > joe = Person.find_by first_name: "Joe"
+  Person Load (0.1ms)  SELECT  "people".* FROM "people" WHERE "people"."first_name" = ? LIMIT 1  [["first_name", "Joe"]]
+ => #<Person id: 1, first_name: "Joe", last_name: "Smithson", created_at: "2015-11-12 15:44:17", updated_at: "2015-11-12 15:57:02">
+
+2.1.1 :005 > Person.delete(joe.id)
+  SQL (1.2ms)  DELETE FROM "people" WHERE "people"."id" = ?  [["id", 1]]
+ => 1
+
+2.1.1 :006 > Person.count
+   (0.1ms)  SELECT COUNT(*) FROM "people"
+ => 1
+2.1.1 :007 >
+```
